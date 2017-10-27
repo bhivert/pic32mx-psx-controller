@@ -91,11 +91,9 @@ bool                        psx_controller_poll(packet_t *buff) {
     if (state_isstopped(_psx_poll_state)) {
         _active_command = &_psx_command[POLL];
         state_reset(&_psx_poll_state);
-        state_exec(&_psx_poll_state);
-    }
-    if (state_isstopped(_psx_poll_state)) {
         *buff = _buff;
+        state_exec(&_psx_poll_state);
         return true;
-    }    
+    }
     return false;
 }
