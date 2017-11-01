@@ -12,40 +12,40 @@
 static packet_t             _buff;
 static unsigned int         _inc;
 
-static id_t                 _start(state_t state) {
+static id_t                 _start(id_t id) {
     LATB &= ~(1<<2);            //  Low #SS1
     _inc = 0;
     _buff.size = 0;
     IFS0 &= ~(1<<8);            //  Clear timer 2 interrupt flag
     T2CON |= (1<<15);           //  Timer 2 ON
-    return ++state.id;
+    return ++id;
 }
 
 static command_t            *_active_command;
 
-static id_t                 _send_receive(state_t state) {
+static id_t                 _send_receive(id_t id) {
     if (_buff.size < sizeof(_buff.header)) {
         _buff.header[_buff.size] = SPI1_Transmit(_active_command->header[_buff.size]);
         ++_buff.size;
-        return ++state.id;
+        return ++id;
     }
     _buff.data.raw[_inc] = SPI1_Transmit((_inc < sizeof(_active_command->params)) ? _active_command->params[_inc] : 0x00);
     ++_inc;
     ++_buff.size;
-    return ++state.id;
+    return ++id;
 }
 
-static id_t                 _sleep(state_t state) {
+static id_t                 _sleep(id_t id) {
     if (_buff.size < sizeof(_buff.header) || _inc < (_buff.header[1] & 0xF) << 1) {
-        return --state.id;
+        return --id;
     }
-    return ++state.id;
+    return ++id;
 }
 
-static id_t                 _stop(state_t state) {
+static id_t                 _stop(id_t id) {
     LATB |= (1<<2);             //  High #SS1
     T2CON = 0;                  //  Clear / Stop timer 2
-    return ++state.id;
+    return ++id;
 }
 
 static state_fct_t          *_fcts[] = {
