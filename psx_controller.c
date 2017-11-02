@@ -63,7 +63,7 @@ void                        __attribute__((vector(_TIMER_2_VECTOR), interrupt(IP
 }
 
 void                        psx_controller_init(void) {
-    state_init(&_psx_poll_state, _fcts, sizeof(_psx_poll_state) / sizeof(state_fct_t *));
+    state_init(&_psx_poll_state, _fcts, sizeof(_fcts) / sizeof(state_fct_t *));
     SPI1_init();
 
     // SPI1 set for psx controller
