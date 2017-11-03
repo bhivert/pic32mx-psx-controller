@@ -23,20 +23,31 @@ static id_t                 _start(id_t id) {
 
 static command_t            *_active_command;
 
+unsigned char               revb(unsigned char b) {
+    return    (b & 0x01) << 7 \
+            | (b & 0x02) << 5 \
+            | (b & 0x04) << 3 \
+            | (b & 0x08) << 1 \
+            | (b & 0x10) >> 1 \
+            | (b & 0x20) >> 3 \
+            | (b & 0x40) >> 5 \
+            | (b & 0x80) >> 7;
+}
+
 static id_t                 _send_receive(id_t id) {
     if (_buff.size < sizeof(_buff.header)) {
-        _buff.header[_buff.size] = SPI1_Transmit(_active_command->header[_buff.size]);
+        _buff.header[_buff.size] = SPI1_Transmit(revb(_active_command->header[_buff.size]));
         ++_buff.size;
         return ++id;
     }
-    _buff.data.raw[_inc] = SPI1_Transmit((_inc < sizeof(_active_command->params)) ? _active_command->params[_inc] : 0x00);
+    _buff.data.raw[_inc] = SPI1_Transmit((_inc < sizeof(_active_command->params)) ? revb(_active_command->params[_inc]) : 0x00);
     ++_inc;
     ++_buff.size;
     return ++id;
 }
 
 static id_t                 _sleep(id_t id) {
-    if (_buff.size < sizeof(_buff.header) || _inc < (_buff.header[1] & 0xF) << 1) {
+    if (_buff.size < sizeof(_buff.header) || _inc < (revb(_buff.header[1]) & 0xF) << 1) {
         return --id;
     }
     return ++id;
