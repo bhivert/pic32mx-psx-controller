@@ -36,18 +36,18 @@ unsigned char               revb(unsigned char b) {
 
 static id_t                 _send_receive(id_t id) {
     if (_buff.size < sizeof(_buff.header)) {
-        _buff.header[_buff.size] = SPI1_Transmit(revb(_active_command->header[_buff.size]));
+        _buff.header[_buff.size] = revb(SPI1_Transmit(revb(_active_command->header[_buff.size])));
         ++_buff.size;
         return ++id;
     }
-    _buff.data.raw[_inc] = SPI1_Transmit((_inc < sizeof(_active_command->params)) ? revb(_active_command->params[_inc]) : 0x00);
+    _buff.data.raw[_inc] = revb(SPI1_Transmit((_inc < sizeof(_active_command->params)) ? revb(_active_command->params[_inc]) : 0x00));
     ++_inc;
     ++_buff.size;
     return ++id;
 }
 
 static id_t                 _sleep(id_t id) {
-    if (_buff.size < sizeof(_buff.header) || _inc < (revb(_buff.header[1]) & 0xF) << 1) {
+    if (_buff.size < sizeof(_buff.header) || _inc < (_buff.header[1] & 0xF) << 1) {
         return --id;
     }
     return ++id;
@@ -84,7 +84,7 @@ void                        psx_controller_init(void) {
     // Timer 2 Setting
     T2CON = 0;                  //  Clear / Stop timer 2
     TMR2 = 0;                   //  Set timer counter
-    PR2 = 0x8;                  //  Set timer overflow
+    PR2 = 0x2;                  //  Set timer overflow
     IPC2 |= ((0x7<<2) | 0x3);   //  Priority 7 / Sub priority 3
     IEC0 |= (1<<8);             //  Enable timer 2 interruption
 }

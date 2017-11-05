@@ -10,12 +10,11 @@
 void            SPI1_init(void) {
     unsigned char   c;
     
-    SPI1CON = 0;                            //  SPI1CON Clear / Stop
-    SPI1BRG = 0x3;
-    TRISF |= (1<<2);                       //  SDI1 set as intput for pull up set
-    LATF |= (1<<2);                         //  SDI1 pull up set
-    c = SPI1BUF;                            //  Clear SPI1BUF
-    SPI1CON = (1<<4) | (1<<5) | (1<<6) |(1<<13)| (1<<15);              //  SPI1 Setup / Start
+    SPI1CON = 0;                                    //  SPI1CON Clear / Stop
+    SPI1BRG = 0x1;
+    TRISF |= (1<<2);                                //  SDI1 set as intput for pull up set
+    c = SPI1BUF;                                    //  Clear SPI1BUF
+    SPI1CON = (1<<4) | (1<<5) | (1<<6) | (1<<15);   //  SPI1 Setup / Start
 }
 
 unsigned char   SPI1_Transmit(unsigned char c) {
