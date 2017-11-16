@@ -4,10 +4,13 @@ Precaution of use:
 When controller where initialised or polled, SPI 1 interface and Timer 2 are used.  
   
 Requirements:  
+
+Hardware pull-up is required on SPI1 MOSI.
+
 \#include "../cstate-machine/state.h"  
 <https://github.com/bhivert/cstate-machine>
 
-The module is set for about 30Hz polling and 125hz spi baudrate
+The module is set for about 30Hz polling and 125hz spi baudrate.
 
 \#pragma config FNOSC =	PRIPLL  
 \#pragma config FSOSCEN =	ON  
