@@ -14,8 +14,6 @@ The module is set for about 30Hz polling and 125hz spi baudrate
 \#pragma config POSCMOD =	XT  
 \#pragma config OSCIOFNC =	ON  
 \#pragma config FPBDIV =	DIV_4  
-
 \#pragma config FPLLIDIV =	DIV_2  
 \#pragma config FPLLMUL =	MUL_16  
 \#pragma config FPLLODIV =	DIV_16  
-\#pragma config UPLLEN =	ON
