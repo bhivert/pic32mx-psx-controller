@@ -55,7 +55,7 @@ static id_t                 _sleep(id_t id) {
 
 static id_t                 _stop(id_t id) {
     LATB |= (1<<2);             //  High #SS1
-    T2CON = 0;                  //  Clear / Stop timer 2
+    T2CON &= ~(1<<15);          //  Stop timer 2
     return ++id;
 }
 
@@ -82,9 +82,9 @@ void                        psx_controller_init(void) {
     LATB |= (1<<2);             //  Hight #SS1
     
     // Timer 2 Setting
-    T2CON = 0;                  //  Clear / Stop timer 2
+    T2CON = 0;             //  Clear / Stop / Set timer 2
     TMR2 = 0;                   //  Set timer counter
-    PR2 = 0x2;                  //  Set timer overflow
+    PR2 = 0x1;                  //  Set timer overflow
     IPC2 |= ((0x7<<2) | 0x3);   //  Priority 7 / Sub priority 3
     IEC0 |= (1<<8);             //  Enable timer 2 interruption
 }
