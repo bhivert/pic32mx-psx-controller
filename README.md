@@ -10,8 +10,9 @@ Hardware pull-up is required on SPI1 MOSI.
 \#include "../cstate-machine/state.h"  
 <https://github.com/bhivert/cstate-machine>
 
-The module is set for about 30Hz polling and 125hz spi baudrate.
+This module is set for about 30Hz polling and 125kHz spi baudrate.
 
+Configuration bits for 8MHz external clock:  
 \#pragma config FNOSC =	PRIPLL  
 \#pragma config FSOSCEN =	ON  
 \#pragma config POSCMOD =	XT  
